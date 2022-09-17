@@ -36,3 +36,30 @@
     transform: rotate(360deg);
   }
 }
+
+.font-20 {
+  font-size: 30pt;
+}
+
+.border-red {
+  border: 1px solid red;
+}
+.border-blue {
+  border: 1px solid blue;
+}
+
+.not-started{
+  background-color: green;
+}
+.started{
+  background-color: aqua;
+}
+.ongoing{
+  background-color: blue;
+}
+.almost-done{
+  background-color: yellow;
+}
+.done {
+  text-decoration: line-through;
+}
