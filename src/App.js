@@ -25,13 +25,7 @@ function App() {
     });
   }
 
-  const [statusList, setStatusList] = useState([
-    // { color: "green", text: "not-started" },
-    // { color: "yellow", text: "started" },
-    // { color: "blue", text: "ongoing" },
-    // { color: "purple", text: "almonst-done" },
-    // { color: "red", text: "done" },
-  ]);
+  const [statusList, setStatusList] = useState([]);
 
   const handleAddTodo = ({ text, category, id, statu }) => {
     setList((prev) => [
@@ -43,7 +37,6 @@ function App() {
         statu,
         date: new Date().toLocaleDateString(),
         status: { id: Math.random().toString(), color: randomColor() },
-        // { color: "green", text: "not-started" }
       },
     ]);
   };
@@ -71,19 +64,10 @@ function App() {
           return filter.id === item.id || filter.id === status.id; // status için koşulu buraya ekle.  ve statusun idsi bu mu diye bak
         });
 
-       
   function handleDeleteClick(id) {
-          let removeItem = [...list].filter((category) => category.id !== id);
-          setList(removeItem);
-        }
-       
-        // const handleDeleteClick = (id) => {
-
-        //   const removeItem  = categories.map((i) => {
-        //     i.status = i.status.filter((item) => item.id !== id)
-        //     return i
-        //   })
-        //   setCategories(removeItem )
+    let removeItem = [...list].filter((category) => category.id !== id);
+    setList(removeItem);
+  }
   return (
     <div className="container mx-auto mt-6">
       <div className="App">
@@ -97,7 +81,6 @@ function App() {
             frameBorder="0"
             className="giphy-embed mx-20 justify-center"
             allowFullScreen
-            
           ></iframe>
           <AddCategory handleCategories={handleCategories} />
           <AddStatus handleStatus={handleStatus} />
@@ -125,7 +108,6 @@ function App() {
                 idx={idx}
                 status={status}
                 statusList={statusList}
-                
               />
             );
           })}
