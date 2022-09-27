@@ -35,13 +35,14 @@ const AddTodoForm = (props) => {
 
   const [statuValue, setStatuValue] = useState({
     id: props.status[0]?.id,
-    name: props.defaultValue,
-    statu: props.status[0]?.name,
+    name: props.status[0]?.name,
   });
   const handleStatuChange = (event) => {
     setStatuValue((prev) => ({
       ...prev,
-      [event.target.name]: event.target.value,
+      id: event.target.value,
+      name: event.nativeEvent.target[event.nativeEvent.target.selectedIndex]
+        .textContent,
     }));
   };
 
@@ -49,13 +50,13 @@ const AddTodoForm = (props) => {
     // initial değeri verdik
     setStatuValue((prev) => ({
       ...prev,
-      statu: props.status[0]?.name,
+      name: props.status[0]?.name,
       id: props.status[0]?.id,
     }));
-  }, [props.statusList]);
+  }, [props.status]);
 
   const handleClick = () => {
-    props.onAddTodo(value);
+    props.onAddTodo({ ...value, statu: statuValue });
   };
 
   return (

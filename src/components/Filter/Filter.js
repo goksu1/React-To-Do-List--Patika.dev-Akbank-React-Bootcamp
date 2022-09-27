@@ -2,13 +2,14 @@ import React from "react";
 
 const Filter = (props) => {
   function handleChange(event) {
-    props.handleFilter(event.target.value);
+    props.handleFilter(event.target.name, event.target.value);
   
   }
 
   return (
     <div>
       <select
+        name="categoryId"
         className="px-4 py-2 mt-2 mx-6 text-indigo-700 bg-white border rounded-md focus:border-indigo-400 focus:ring-indigo-300 focus:outline-none focus:ring focus:ring-opacity-40"
         onChange={handleChange}
       >
@@ -22,6 +23,7 @@ const Filter = (props) => {
         })}
       </select>
       <select
+       name="statuId"
         className="px-4 py-2 mt-2 mx-6 text-indigo-700 bg-white border rounded-md focus:border-indigo-400 focus:ring-indigo-300 focus:outline-none focus:ring focus:ring-opacity-40"
         onChange={handleChange}
         

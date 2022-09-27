@@ -18,10 +18,12 @@ function App() {
       ];
     });
   }
-  const [filter, setFilter] = useState({ id: "0" });
-  function handleFilter(categoryId, statuId) {
+  const [filter, setFilter] = useState({ categoryId:"0", statuId:"0"});
+  function handleFilter(key, value) {
     setFilter((prev) => {
-      return { ...prev, id: categoryId, statuId };
+      const obj={}
+      obj[key]=value
+      return { ...prev, ...obj};
     });
   }
 
@@ -56,17 +58,35 @@ function App() {
         status: itemIdx === idx ? status : item.status,
       }))
     );
-  };
+  };console.log('list', list)
+  console.log('filter', filter)
   const filterList =
-    filter.id === "0"
+    (filter.categoryId === "0" && filter.statuId === "0")
       ? list
       : list.filter((item) => {
-          return filter.id === item.id || filter.id === status.id; // status için koşulu buraya ekle.  ve statusun idsi bu mu diye bak
+          return filter.categoryId === item.id || filter.statuId === item.statu.id; // status için koşulu buraya ekle.  ve statusun idsi bu mu diye bak
         });
 
   function handleDeleteClick(id) {
     let removeItem = [...list].filter((category) => category.id !== id);
     setList(removeItem);
+  }
+
+  function editListItem(id, category, statu, categoryId)  {
+    const cloneList= [...list];
+    const foundElement= cloneList.find((element) => {
+      return(
+        
+        element.statu.id === id
+      )
+    })
+    if (foundElement) {
+    foundElement.category = category
+    foundElement.statu.name = statu.name
+    foundElement.statu.id = statu.id
+    foundElement.id = categoryId
+    setList(cloneList)
+  }
   }
   return (
     <div className="container mx-auto mt-6">
@@ -108,6 +128,7 @@ function App() {
                 idx={idx}
                 status={status}
                 statusList={statusList}
+                editListItem={editListItem}
               />
             );
           })}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 
 const customStyles = {
@@ -13,11 +13,19 @@ const customStyles = {
 };
 
 const TodoItem = (props) => {
+  const[editChange, setEditChange] = useState({
+    category:"",
+    statu:"",
+    categoryId:"0",
+    statuId:"0",
+  })
   const handleStatusChange = (event) => {
-    props.onStatusChange(props.idx, {
-      color: event.target.value,
-      text: event.target.text,
-    });
+    setEditChange((prev) =>{
+return{
+  ...prev, [event.target.name]: event.nativeEvent.target[event.nativeEvent.target.selectedIndex]
+  .textContent, [event.target.name + "Id"]: event.target.value
+}
+    })
   };
 
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -25,8 +33,10 @@ const TodoItem = (props) => {
     setIsOpen(true);
   }
   function closeModal() {
+    props.editListItem(props.item.status.id)
     setIsOpen(false);
   }
+
 
   return (
     <div
@@ -40,7 +50,7 @@ const TodoItem = (props) => {
         <p> Category:{props.item.category} </p>
         <p> Date: {props.item.date}</p>
 
-        <p> Statu: {props.item.status.color}</p>
+        <p> Statu: {props.item.statu.name}</p>
       </div>
 
       <div className="flex w-[100px] h-[40px] opacity-80 text-indigo-700  my-6 rounded-md bg-[#ECF1F8] py-2 justify-center mb-3">
