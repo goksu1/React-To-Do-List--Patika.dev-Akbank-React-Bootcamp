@@ -1,77 +1,138 @@
-import logo from './logo.svg'
-import { useState } from 'react'
-import './App.css'
-import AddTodoForm from './components/AddTodoForm'
-import TodoItem from './components/TodoItem/TodoItem'
+import { useState } from "react";
+import "./App.css";
+import AddTodoForm from "./components/AddTodoForm";
+import TodoItem from "./components/TodoItem/TodoItem";
+import AddCategory from "./components/AddCategory/AddCategory";
+import Filter from "./components/Filter/Filter";
+import AddStatus from "./components/AddStatus/AddStatus";
+import randomColor from "randomcolor";
 
 function App() {
-  const [list, setList] = useState([])
-  const [categories, setCategories] = useState([
-    {
-      category: 'eğitim',
-      statusList: [
-        'ders saati belirlendi',
-        'ders başladı',
-        'dersteyiz',
-        'ders bitti ödevverildi',
-        'ödevler kontrol edildi',
-      ],
-    },
-    'eğitim',
-    'ev işleri',
-    'profesyon',
-  ])
+  const [list, setList] = useState([]);
+  const [categories, setCategories] = useState([]);
+  function handleCategories(categoryName) {
+    setCategories((prev) => {
+      return [
+        ...prev,
+        { name: categoryName, id: Math.random().toString(), status: [] },
+      ];
+    });
+  }
+  const [filter, setFilter] = useState({ id: "0" });
+  function handleFilter(categoryId, statuId) {
+    setFilter((prev) => {
+      return { ...prev, id: categoryId, statuId };
+    });
+  }
 
   const [statusList, setStatusList] = useState([
-    { color: 'green', text: 'not-started' },
-    { color: 'yellow', text: 'started' },
-    { color: 'blue', text: 'ongoing' },
-    { color: 'purple', text: 'almonst-done' },
-    { color: 'red', text: 'done' },
-  ])
+    // { color: "green", text: "not-started" },
+    // { color: "yellow", text: "started" },
+    // { color: "blue", text: "ongoing" },
+    // { color: "purple", text: "almonst-done" },
+    // { color: "red", text: "done" },
+  ]);
 
-  const handleAddTodo = ({ text, category }) => {
+  const handleAddTodo = ({ text, category, id, statu }) => {
     setList((prev) => [
       ...prev,
       {
+        id,
         text,
         category,
+        statu,
         date: new Date().toLocaleDateString(),
-        status: { color: 'green', text: 'not-started' },
+        status: { id: Math.random().toString(), color: randomColor() },
+        // { color: "green", text: "not-started" }
       },
-    ])
-   
+    ]);
+  };
+  const [status, setStatus] = useState([]);
+  function handleStatus(statuName) {
+    setStatus((prev) => {
+      return [
+        ...prev,
+        { name: statuName, id: Math.random().toString(), text: "" },
+      ];
+    });
   }
-
   const handleStatusChange = (idx, status) => {
-    console.log('fired', idx, status)
-    setList((prev) =>
+    setStatusList((prev) =>
       prev.map((item, itemIdx) => ({
         ...item,
         status: itemIdx === idx ? status : item.status,
       }))
-    )
-  }
+    );
+  };
+  const filterList =
+    filter.id === "0"
+      ? list
+      : list.filter((item) => {
+          return filter.id === item.id || filter.id === status.id; // status için koşulu buraya ekle.  ve statusun idsi bu mu diye bak
+        });
 
+       
+  function handleDeleteClick(id) {
+          let removeItem = [...list].filter((category) => category.id !== id);
+          setList(removeItem);
+        }
+       
+        // const handleDeleteClick = (id) => {
+
+        //   const removeItem  = categories.map((i) => {
+        //     i.status = i.status.filter((item) => item.id !== id)
+        //     return i
+        //   })
+        //   setCategories(removeItem )
   return (
-    <div className="App">
-      <AddTodoForm
-        categories={categories}
-        defaultValue=""
-        onAddTodo={handleAddTodo}
-      />
-      <br />
-      {list.map((item, idx) => (
-        <TodoItem
-          key={idx}
-          onStatusChange={handleStatusChange}
-          item={item}
-          idx={idx}
-          statusList={statusList}
-        />
-      ))}
+    <div className="container mx-auto mt-6">
+      <div className="App">
+        <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
+          <iframe
+            title="iframetitle"
+            src="https://giphy.com/embed/Y2y9IpjbPDakvK6LrR"
+            width="1100"
+            height="250"
+            position="relative"
+            frameBorder="0"
+            className="giphy-embed mx-20 justify-center"
+            allowFullScreen
+            
+          ></iframe>
+          <AddCategory handleCategories={handleCategories} />
+          <AddStatus handleStatus={handleStatus} />
+
+          <AddTodoForm
+            categories={categories}
+            status={status}
+            defaultValue=""
+            onAddTodo={handleAddTodo}
+          />
+          <Filter
+            categories={categories}
+            status={status}
+            handleFilter={handleFilter}
+          />
+          <br />
+          {filterList.map((item, idx) => {
+            return (
+              <TodoItem
+                categories={categories}
+                key={idx}
+                onStatusChange={handleStatusChange}
+                handleDeleteClick={handleDeleteClick}
+                item={item}
+                idx={idx}
+                status={status}
+                statusList={statusList}
+                
+              />
+            );
+          })}
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
